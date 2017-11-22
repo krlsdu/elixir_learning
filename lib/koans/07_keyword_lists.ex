@@ -6,7 +6,7 @@ defmodule KeywordLists do
   koan "Like maps, keyword lists are key-value pairs" do
     kw_list = [foo: "bar"]
 
-    assert kw_list[:foo] == ___
+    assert kw_list[:foo] == "bar"
   end
 
   koan "Keys may be repeated, but only the first is accessed" do
