@@ -8,20 +8,20 @@ defmodule Functions do
   end
 
   koan "Functions map arguments to outputs" do
-    assert greet("World") == ___
+    assert greet("World") == "Hello, World!"
   end
 
   def multiply(a, b), do: a * b
   koan "Single line functions are cool, but mind the comma and the colon!" do
-    assert 6 == multiply(2, ___)
+    assert 6 == multiply(2, 3)
   end
 
   def first(foo, bar), do: "#{foo} and #{bar}"
   def first(foo), do: "Only #{foo}"
 
   koan "Functions with the same name are distinguished by the number of arguments they take" do
-    assert first("One", "Two") == ___
-    assert first("One") == ___
+    assert first("One", "Two") == "One and Two"
+    assert first("One") == "Only One"
   end
 
   def repeat_again(message, times \\ 5) do
@@ -29,24 +29,24 @@ defmodule Functions do
   end
 
   koan "Functions can have default argument values" do
-    assert repeat_again("Hello ") == ___
-    assert repeat_again("Hello ", 2) == ___
+    assert repeat_again("Hello ") == "Hello Hello Hello Hello Hello "
+    assert repeat_again("Hello ", 2) == "Hello Hello "
   end
 
   def sum_up(thing) when is_list(thing), do: :entire_list
   def sum_up(_thing), do: :single_thing
 
   koan "Functions can have guard expressions" do
-    assert sum_up([1, 2, 3]) == ___
-    assert sum_up(1) == ___
+    assert sum_up([1, 2, 3]) == :entire_list
+    assert sum_up(1) == :single_thing
   end
 
   def bigger(a,b) when a > b, do: "#{a} is bigger than #{b}"
   def bigger(a,b) when a <= b, do: "#{a} is not bigger than #{b}"
 
   koan "Intricate guards are possible, but be mindful of the reader" do
-    assert bigger(10, 5) == ___
-    assert bigger(4, 27) == ___
+    assert bigger(10, 5) == "10 is bigger than 5"
+    assert bigger(4, 27) == "4 is not bigger than 27"
   end
 
   def get_number(0), do: "The number was zero"

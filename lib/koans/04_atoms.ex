@@ -5,7 +5,7 @@ defmodule Atoms do
 
   koan "Atoms are constants where their name is their own value" do
     adam = :human
-    assert adam == adam
+    assert adam == :human
   end
 
   koan "It is surprising to find out that booleans are atoms" do
