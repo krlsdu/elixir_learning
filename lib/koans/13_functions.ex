@@ -53,28 +53,28 @@ defmodule Functions do
   def get_number(number), do: "The number was #{number}"
 
   koan "For simpler cases, pattern matching is effective" do
-    assert get_number(0) == ___
-    assert get_number(5) == ___
+    assert get_number(0) == "The number was zero"
+    assert get_number(5) == "The number was 5"
   end
 
   koan "Little anonymous functions are common, and called with a dot" do
     multiply = fn (a,b) -> a * b end
-    assert multiply.(2,3) == ___
+    assert multiply.(2,3) == 6
   end
 
   koan "You can even go shorter, by using capture syntax `&()` and positional arguments" do
     multiply = &(&1 * &2)
-    assert multiply.(2,3) == ___
+    assert multiply.(2,3) == 6
   end
 
   koan "Prefix a string with & to build a simple anonymous greet function" do
     greet = &"Hi, #{&1}!"
-    assert greet.("Foo") == ___
+    assert greet.("Foo") == "Hi, Foo!"
   end
 
   koan "You can build anonymous functions out of any elixir expression by prefixing it with &" do
     three_times = &[&1, &1, &1]
-    assert three_times.("foo") == ___
+    assert three_times.("foo") == ["foo","foo","foo"]
   end
 
   def times_five_and_then(number, fun), do: fun.(number*5)
