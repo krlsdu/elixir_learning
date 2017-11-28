@@ -81,12 +81,12 @@ defmodule Functions do
   def square(number), do: number * number
 
   koan "You can pass functions around as arguments. Place an '&' before the name and state the arity" do
-    assert times_five_and_then(2, &square/1) == ___
+    assert times_five_and_then(2, &square/1) == 100
   end
 
   koan "The '&' operation is not needed for anonymous functions" do
     cube = fn number -> number * number * number end
-    assert times_five_and_then(2, cube) == ___
+    assert times_five_and_then(2, cube) == 1000
   end
 
   koan "The result of a function can be piped into another function as its first argument" do
@@ -95,6 +95,6 @@ defmodule Functions do
             |> Enum.map(&String.capitalize/1)
             |> Enum.join(" ")
 
-    assert result == ___
+    assert result == "Full Name"
   end
 end
