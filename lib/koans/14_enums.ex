@@ -63,19 +63,19 @@ defmodule Enums do
   end
 
   koan "When you want to find that one pesky element" do
-    assert Enum.find([1, 2, 3, 4], &even?/1) == 3
+    assert Enum.find([1, 2, 3, 4], &even?/1) == 2
   end
 
   def divisible_by_five?(n), do: rem(n, 5) == 0
   koan "...but you don't quite find it..." do
-    assert Enum.find([1, 2, 3], &divisible_by_five?/1) == ___
+    assert Enum.find([1, 2, 3], &divisible_by_five?/1) == nil
   end
 
   koan "...you can settle for a consolation prize" do
-    assert Enum.find([1, 2, 3], :no_such_element, &divisible_by_five?/1) == ___
+    assert Enum.find([1, 2, 3], :no_such_element, &divisible_by_five?/1) == :no_such_element
   end
 
   koan "Collapse an entire list of elements down to a single one by repeating a function." do
-    assert Enum.reduce([1, 2, 3], 0, fn(element, accumulator) -> element + accumulator end) == ___
+    assert Enum.reduce([1, 2, 3], 0, fn(element, accumulator) -> element + accumulator end) == 6
   end
 end
