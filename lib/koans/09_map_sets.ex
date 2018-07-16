@@ -37,7 +37,7 @@ defmodule MapSets do
     assert MapSet.member?(@set, 3) == true
   end
 
-  koan "I am merely another collection but, you can perform some operations on me" do
+  koan "I am merely another collection, but you can perform some operations on me" do
     new_set = MapSet.new(@set, fn x -> 3 * x end)
 
     assert MapSet.member?(new_set, 15) == true
@@ -54,10 +54,6 @@ defmodule MapSets do
     modified_set = MapSet.delete(@set, 1)
 
     assert MapSet.member?(modified_set, 1) == false
-  end
-
-  koan "How large is my map set?" do
-    assert MapSet.size(@set) == 5
   end
 
   koan "Are these maps twins?" do

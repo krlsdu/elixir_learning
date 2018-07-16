@@ -8,11 +8,10 @@ defmodule StructsTests do
       nil,
       "Joe",
       33,
-      {:multiple, [true, false]},
       {:ok, 22},
       %Structs.Airline{plane: %Structs.Plane{maker: :airbus}, name: "Southwest"},
       %Structs.Airline{plane: %Structs.Plane{maker: :boeing, passengers: 202}, name: "Southwest"},
-      %{plane: %{maker: :cessna}, name: "Southwest"},
+      %{plane: %{maker: :cessna}, name: "Southwest"}
     ]
 
     test_all(Structs, answers)

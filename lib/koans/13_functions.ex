@@ -12,6 +12,7 @@ defmodule Functions do
   end
 
   def multiply(a, b), do: a * b
+
   koan "Single line functions are cool, but mind the comma and the colon!" do
     assert 6 == multiply(2, 3)
   end
@@ -41,8 +42,8 @@ defmodule Functions do
     assert sum_up(1) == :single_thing
   end
 
-  def bigger(a,b) when a > b, do: "#{a} is bigger than #{b}"
-  def bigger(a,b) when a <= b, do: "#{a} is not bigger than #{b}"
+  def bigger(a, b) when a > b, do: "#{a} is bigger than #{b}"
+  def bigger(a, b) when a <= b, do: "#{a} is not bigger than #{b}"
 
   koan "Intricate guards are possible, but be mindful of the reader" do
     assert bigger(10, 5) == "10 is bigger than 5"
@@ -77,7 +78,17 @@ defmodule Functions do
     assert three_times.("foo") == ["foo","foo","foo"]
   end
 
-  def times_five_and_then(number, fun), do: fun.(number*5)
+  koan "You can use pattern matching to define multiple cases for anonymous functions" do
+    inspirational_quote = fn
+      {:ok, result} -> "Success is #{result}"
+      {:error, reason} -> "You just lost #{reason}"
+    end
+
+    assert inspirational_quote.({:ok, "no accident"}) == "Success is no accident"
+    assert inspirational_quote.({:error, "the game"}) == "You just lost the game"
+  end
+
+  def times_five_and_then(number, fun), do: fun.(number * 5)
   def square(number), do: number * number
 
   koan "You can pass functions around as arguments. Place an '&' before the name and state the arity" do
@@ -90,11 +101,25 @@ defmodule Functions do
   end
 
   koan "The result of a function can be piped into another function as its first argument" do
-    result = "full-name"
-            |> String.split("-")
-            |> Enum.map(&String.capitalize/1)
-            |> Enum.join(" ")
+    result =
+      "full-name"
+      |> String.split("-")
+      |> Enum.map(&String.capitalize/1)
+      |> Enum.join(" ")
 
     assert result == "Full Name"
+  end
+
+  koan "Conveniently keyword lists can be used for function options" do
+    transform = fn str, opts ->
+      if opts[:upcase] do
+        String.upcase(str)
+      else
+        str
+      end
+    end
+
+    assert transform.("good", upcase: true) == "GOOD"
+    assert transform.("good", upcase: false) == "good"
   end
 end

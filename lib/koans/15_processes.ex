@@ -18,9 +18,11 @@ defmodule Processes do
   end
 
   koan "New processes are spawned functions" do
-    value = spawn(fn -> receive do
-                      end
-                end)
+    value =
+      spawn(fn ->
+        receive do
+        end
+      end)
 
     assert is_pid(value) == true
   end
@@ -39,7 +41,7 @@ defmodule Processes do
   end
 
   koan "Processes can send and receive messages" do
-    send self(), "hola!"
+    send(self(), "hola!")
 
     receive do
       msg -> assert msg == "hola!"
@@ -58,8 +60,8 @@ defmodule Processes do
   end
 
   koan "Received messages are queued, first in first out" do
-    send self(), "hola!"
-    send self(), "como se llama?"
+    send(self(), "hola!")
+    send(self(), "como se llama?")
 
     assert_receive "hola!"
     assert_receive "como se llama?"
@@ -68,7 +70,7 @@ defmodule Processes do
   koan "A common pattern is to include the sender in the message, so that it can reply" do
     greeter = fn ->
       receive do
-        {:hello, sender} -> send sender, :how_are_you?
+        {:hello, sender} -> send(sender, :how_are_you?)
       end
     end
 
@@ -81,7 +83,7 @@ defmodule Processes do
   def yelling_echo_loop do
     receive do
       {caller, value} ->
-        send caller, String.upcase(value)
+        send(caller, String.upcase(value))
         yelling_echo_loop()
     end
   end
@@ -99,8 +101,9 @@ defmodule Processes do
   def state(value) do
     receive do
       {caller, :get} ->
-        send caller, value
+        send(caller, value)
         state(value)
+
       {caller, :set, new_value} ->
         state(new_value)
     end
@@ -108,38 +111,45 @@ defmodule Processes do
 
   koan "Processes can be used to hold state" do
     initial_state = "foo"
-    pid = spawn(fn ->
-      state(initial_state)
-    end)
 
-    send pid, {self(), :get}
+    pid =
+      spawn(fn ->
+        state(initial_state)
+      end)
+
+    send(pid, {self(), :get})
     assert_receive "foo"
 
-    send pid, {self(), :set, "bar"}
-    send pid, {self(), :get}
+    send(pid, {self(), :set, "bar"})
+    send(pid, {self(), :get})
     assert_receive "bar"
   end
 
   koan "Waiting for a message can get boring" do
     parent = self()
-    spawn(fn -> receive do
-                after
-                  5 -> send parent, {:waited_too_long, "I am impatient"}
-                end
-           end)
+
+    spawn(fn ->
+      receive do
+      after
+        5 -> send(parent, {:waited_too_long, "I am impatient"})
+      end
+    end)
 
     assert_receive {:waited_too_long, "I am impatient"}
   end
 
   koan "Trapping will allow you to react to someone terminating the process" do
     parent = self()
-    pid = spawn(fn ->
-                      Process.flag(:trap_exit, true)
-                      send parent, :ready
-                      receive do
-                        {:EXIT, _pid, reason} -> send parent, {:exited, reason}
-                      end
-              end)
+
+    pid =
+      spawn(fn ->
+        Process.flag(:trap_exit, true)
+        send(parent, :ready)
+
+        receive do
+          {:EXIT, _pid, reason} -> send(parent, {:exited, reason})
+        end
+      end)
 
     receive do
       :ready -> true

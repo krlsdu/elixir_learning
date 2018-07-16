@@ -15,18 +15,20 @@ defmodule Tasks do
   end
 
   koan "Yield returns nil if the task isn't done yet" do
-    handle = Task.async(fn ->
-                             :timer.sleep(100)
-                             3 * 3
-                         end)
+    handle =
+      Task.async(fn ->
+        3 * 3
+        :timer.sleep(100)
+        end)
     assert Task.yield(handle, 10) == :nil
   end
 
   koan "Tasks can be aborted with shutdown" do
-    handle = Task.async(fn ->
-                             :timer.sleep(100)
-                             3 * 3
-                         end)
+    handle =
+      Task.async(fn ->
+        :timer.sleep(100)
+        3 * 3
+      end)
 
     %Task{pid: pid} = handle
     Task.shutdown(handle)
@@ -41,10 +43,11 @@ defmodule Tasks do
   end
 
   koan "You can yield to multiple tasks at once and extract the results" do
-    squares = [1, 2, 3, 4]
-             |> Enum.map(fn(number) -> Task.async(fn -> number * number end) end)
-             |> Task.yield_many(100)
-             |> Enum.map(fn({_task,{:ok, result}}) -> result end)
+    squares =
+      [1, 2, 3, 4]
+      |> Enum.map(fn number -> Task.async(fn -> number * number end) end)
+      |> Task.yield_many(100)
+      |> Enum.map(fn {_task, {:ok, result}} -> result end)
 
     assert squares == [1,4,9,16]
   end

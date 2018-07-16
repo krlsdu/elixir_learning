@@ -2,7 +2,10 @@ defmodule Runner do
   use GenServer
 
   def koan?(koan) do
-    Keyword.has_key?(koan.__info__(:exports), :all_koans)
+    case Code.ensure_loaded(koan) do
+      {:module, _} -> Keyword.has_key?(koan.__info__(:functions), :all_koans)
+      _ -> false
+    end
   end
 
   def modules do
@@ -10,7 +13,8 @@ defmodule Runner do
 
     modules
     |> Stream.map(&(&1.module_info |> get_in([:compile, :source])))
-    |> Stream.map(&to_string/1)  # Paths are charlists
+    # Paths are charlists
+    |> Stream.map(&to_string/1)
     |> Stream.zip(modules)
     |> Stream.filter(fn {_path, mod} -> koan?(mod) end)
     |> Stream.map(fn {path, mod} -> {path_to_number(path), mod} end)
@@ -71,6 +75,7 @@ defmodule Runner do
     Display.show_failure(error, module, name)
     :failed
   end
+
   defp display(_), do: :passed
 
   defp flush do

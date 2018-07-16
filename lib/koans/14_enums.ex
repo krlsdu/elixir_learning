@@ -12,12 +12,14 @@ defmodule Enums do
   end
 
   def less_than_five?(n), do: n < 5
+
   koan "Elements can have a lot in common" do
     assert Enum.all?([1, 2, 3], &less_than_five?/1) == true
     assert Enum.all?([4, 6, 8], &less_than_five?/1) == false
   end
 
   def even?(n), do: rem(n, 2) == 0
+
   koan "Sometimes you just want to know if there are any elements fulfilling a condition" do
     assert Enum.any?([1, 2, 3], &even?/1) == true
     assert Enum.any?([1, 3, 5], &even?/1) == false
@@ -30,6 +32,7 @@ defmodule Enums do
   end
 
   def multiply_by_ten(n), do: 10 * n
+
   koan "Map converts each element of a list by running some function with it" do
     assert Enum.map([1, 2, 3], &multiply_by_ten/1) == [10,20,30]
   end
@@ -67,6 +70,7 @@ defmodule Enums do
   end
 
   def divisible_by_five?(n), do: rem(n, 5) == 0
+
   koan "...but you don't quite find it..." do
     assert Enum.find([1, 2, 3], &divisible_by_five?/1) == nil
   end

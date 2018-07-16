@@ -72,9 +72,9 @@ defmodule PatternMatching do
 
   koan "And they will only run the code that matches the argument" do
     name = fn
-      ("duck")  -> "Donald"
-      ("mouse") -> "Mickey"
-      (_other)  -> "I need a name!"
+      "duck" -> "Donald"
+      "mouse" -> "Mickey"
+      _other -> "I need a name!"
     end
 
     assert name.("mouse") == "Mickey"
@@ -85,10 +85,11 @@ defmodule PatternMatching do
   koan "Errors are shaped differently than successful results" do
     dog = %{type: "dog"}
 
-    result = case Map.fetch(dog, :type) do
-      {:ok, value} -> value
-      :error -> "not present"
-    end
+    result =
+      case Map.fetch(dog, :type) do
+        {:ok, value} -> value
+        :error -> "not present"
+      end
 
     assert result == "dog"
   end
@@ -100,6 +101,18 @@ defmodule PatternMatching do
   koan "You can pattern match into the fields of a struct" do
     %Animal{name: name} = %Animal{kind: "dog", name: "Max"}
     assert name == "Max"
+  end
+
+  defmodule Plane do
+    defstruct passengers: 0, maker: :boeing
+  end
+
+  def plane?(%Plane{}), do: true
+  def plane?(_), do: false
+
+  koan "...or onto the type of the struct itself" do
+    assert plane?(%Plane{passengers: 417, maker: :boeing}) == true
+    assert plane?(%Animal{}) == false
   end
 
   koan "Structs will even match with a regular map" do
@@ -122,9 +135,9 @@ defmodule PatternMatching do
     pinned_variable = 1
 
     example = fn
-      (^pinned_variable) -> "The number One"
-      (2) -> "The number Two"
-      (number) -> "The number #{number}"
+      ^pinned_variable -> "The number One"
+      2 -> "The number Two"
+      number -> "The number #{number}"
     end
     assert example.(1) == "The number One"
     assert example.(2) == "The number Two"
@@ -133,10 +146,12 @@ defmodule PatternMatching do
 
   koan "Pinning works anywhere one would match, including 'case'" do
     pinned_variable = 1
-    result = case 1 do
-               ^pinned_variable -> "same"
-               other -> "different #{other}"
-             end
+
+    result =
+      case 1 do
+        ^pinned_variable -> "same"
+        other -> "different #{other}"
+      end
 
     assert result == "same"
   end
